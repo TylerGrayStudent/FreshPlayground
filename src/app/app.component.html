@@ -1,0 +1,30 @@
+<p>
+  Using Custom Async Validators
+</p>
+
+<form class="example-form" [formGroup]="registrationForm">
+  <mat-form-field class="example-full-width">
+    <mat-label>Name</mat-label>
+    <input matInput placeholder="Ex. John Doe" formControlName="name">
+  </mat-form-field>
+
+  <mat-form-field class="example-full-width">
+    <mat-label>Username</mat-label>
+    <input matInput placeholder="Ex. Batman" formControlName="username" />
+    <mat-error
+      *ngIf="registrationForm.get('username').hasError('usernameAlreadyExists')"
+    >
+      Username already <strong>exists</strong>
+    </mat-error>
+  </mat-form-field>
+
+  <div class="button-container">
+  <button
+    mat-raised-button
+    color="primary"
+    [disabled]="!registrationForm.valid"
+  >
+    Submit
+  </button>
+</div>
+</form>
