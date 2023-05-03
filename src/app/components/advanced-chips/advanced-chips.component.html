@@ -1,0 +1,48 @@
+<mat-form-field class="status-chips">
+  <mat-chip-grid #chipList aria-label="Status selection">
+    <mat-chip-row
+      *ngFor="let status of selectedValues"
+      [editable]="selectable"
+      [removable]="removable"
+      (removed)="remove(status)"
+      [disabled]="disabled"
+    >
+      {{ displayProperty ? status[displayProperty] : status }}
+      <mat-icon class="mat-icon" matChipRemove *ngIf="removable"
+        >cancel</mat-icon
+      >
+    </mat-chip-row>
+    <input
+      #statusInput
+      [placeholder]="placeholder"
+      [ngModel]="input | async"
+      [matAutocomplete]="auto"
+      [matChipInputFor]="chipList"
+      [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+      (ngModelChange)="input.next($event)"
+      [disabled]="disabled"
+    />
+    <button
+      matSuffix
+      mat-icon-button
+      aria-label="Reset Filter"
+      *ngIf="selectedValues.length && !requireOne"
+      (click)="reset()"
+    >
+      <mat-icon>close</mat-icon>
+    </button>
+  </mat-chip-grid>
+  <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+    <ng-container
+      *ngFor="
+        let availableOptions of input.value === '' || input.value === null
+          ? availableOptions
+          : (filteredStatuses$ | async)
+      "
+    >
+      <mat-option [value]="availableOptions" *ngIf="availableOptions">
+        {{ availableOptions[displayProperty] || availableOptions }}
+      </mat-option>
+    </ng-container>
+  </mat-autocomplete>
+</mat-form-field>

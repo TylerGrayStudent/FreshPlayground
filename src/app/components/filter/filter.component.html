@@ -1,0 +1,61 @@
+<div>
+  <mat-form-field
+    style="width: 100%"
+    *ngIf="autocompleteOptions.length === 0; else virtualScrollAutoComplete"
+  >
+    <mat-label>{{ label }}</mat-label>
+    <input
+      matInput
+      hqDebounce
+      [debounceTime]="250"
+      (onEvent)="onFilterChange(filterFormControl.value)"
+      [placeholder]="placeholder"
+      [formControl]="filterFormControl"
+    />
+
+    <mat-error matError *ngIf="filterFormControl?.hasError('pattern')">
+      {{ this.error }}
+    </mat-error>
+    <button
+      matSuffix
+      mat-icon-button
+      aria-label="Reset Filter"
+      *ngIf="filterFormControl.value"
+      (click)="onClearClick()"
+    >
+      <mat-icon>close</mat-icon>
+    </button>
+  </mat-form-field>
+
+  <ng-template #virtualScrollAutoComplete>
+    <hq-autocomplete [autocompleteOptions]="autocompleteOptions">
+      <ng-template #inputAutoComplete let-binde="autocomplete">
+        <mat-form-field style="width: 100%">
+          <mat-label>{{ label }}</mat-label>
+          <input
+            matInput
+            hqDebounce
+            [debounceTime]="250"
+            (onEvent)="onFilterChange(filterFormControl.value)"
+            [placeholder]="placeholder"
+            [formControl]="filterFormControl"
+            [matAutocomplete]="binde"
+          />
+
+          <mat-error matError *ngIf="filterFormControl?.hasError('pattern')">
+            {{ this.error }}
+          </mat-error>
+          <button
+            matSuffix
+            mat-icon-button
+            aria-label="Reset Filter"
+            *ngIf="filterFormControl.value"
+            (click)="onClearClick()"
+          >
+            <mat-icon>close</mat-icon>
+          </button>
+        </mat-form-field>
+      </ng-template>
+    </hq-autocomplete>
+  </ng-template>
+</div>
